@@ -1,16 +1,15 @@
 package com.es.phoneshop.model.cart;
 
-import com.es.phoneshop.model.product.Product;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Cart {
     private Set<CartItem> cartItemList;
     private int totalQuantity;
     private BigDecimal totalPrice;
 
-    Cart() {
+    public Cart() {
         cartItemList = new HashSet<>();
         totalPrice = new BigDecimal(0);
     }
@@ -21,7 +20,7 @@ public class Cart {
         this.totalPrice = totalPrice;
     }
 
-    Set<CartItem> getCartItemList() {
+    public Set<CartItem> getCartItemList() {
         return cartItemList;
     }
 
@@ -43,23 +42,5 @@ public class Cart {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    void recalculate() {
-        int tempTotalQuantity = 0;
-        BigDecimal tempTotalPrice = new BigDecimal(0);
-
-        for (CartItem cartItem : cartItemList) {
-            tempTotalQuantity += cartItem.getQuantity();
-            tempTotalPrice = tempTotalPrice.add(cartItem.getProduct().getPrice()
-                    .multiply(new BigDecimal(cartItem.getQuantity())));
-        }
-
-        totalQuantity = tempTotalQuantity;
-        totalPrice = tempTotalPrice;
-    }
-
-    Optional<CartItem> findProduct(Product product) {
-        return cartItemList.stream().filter(cartItem -> cartItem.getProduct().equals(product)).findAny();
     }
 }

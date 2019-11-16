@@ -4,7 +4,8 @@ import com.es.phoneshop.exceptions.OutOfStockException;
 import com.es.phoneshop.exceptions.ProductNotFoundException;
 import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.HttpSessionCartService;
-import com.es.phoneshop.model.lastViewed.LastViewed;
+import com.es.phoneshop.model.lastViewed.HttpSessionLVService;
+import com.es.phoneshop.model.lastViewed.LastViewedService;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductListService;
 
@@ -15,12 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.LinkedList;
 import java.util.Locale;
 
 public class ProductDetailsPageServlet extends HttpServlet {
     private ProductListService productListService;
     private CartService cartService;
-    private LastViewed lastViewed;
+    private LastViewedService lastViewedService;
 
     private long getProductId(HttpServletRequest request) {
         return Long.parseLong(request.getPathInfo().substring(1));
@@ -28,7 +30,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
 
     private void showPage(HttpServletRequest request, HttpServletResponse response, Product product) throws ServletException, IOException {
         request.setAttribute("product", product);
-        request.setAttribute("lastViewed", lastViewed.getLastViewed());
+        request.setAttribute("lastViewed", lastViewedService.getLastViewed(request.getSession()));
         request.setAttribute("cart", cartService.getCart(request.getSession()));
         request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
     }
@@ -37,14 +39,15 @@ public class ProductDetailsPageServlet extends HttpServlet {
     public void init() {
         productListService = new ProductListService();
         cartService = HttpSessionCartService.getInstance();
+        lastViewedService = HttpSessionLVService.getInstance();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        lastViewed = new LastViewed(request.getSession());
-
         try {
-            lastViewed.add(productListService.getProduct(getProductId(request)));
+            LinkedList<Product> lastViewed = lastViewedService.getLastViewed(request.getSession());
+            Product product = productListService.getProduct(getProductId(request));
+            lastViewedService.add(lastViewed, product);
 
             showPage(request, response, productListService.getProduct(getProductId(request)));
         } catch (ProductNotFoundException e) {
