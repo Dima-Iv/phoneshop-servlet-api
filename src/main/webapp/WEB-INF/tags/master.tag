@@ -11,8 +11,9 @@
   <header>
     <a href="${pageContext.servletContext.contextPath}">
       <img src="${pageContext.servletContext.contextPath}/images/logo.svg"/>
-      PhoneShop Total price: ${cart.totalPrice}
+      PhoneShop
     </a>
+    <jsp:include page="/WEB-INF/fragments/miniCart.jsp"/>
   </header>
   <main>
     <jsp:doBody/>

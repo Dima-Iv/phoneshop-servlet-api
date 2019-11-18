@@ -89,4 +89,43 @@ public class HttpSessionCartService implements CartService {
             lock.unlock();
         }
     }
+
+    @Override
+    public void update(Cart cart, Product product, int quantity) {
+        lock.lock();
+        try {
+            if(quantity == 0) {
+                delete(cart, product);
+                return;
+            }
+
+            Optional<CartItem> cartItem = findProduct(cart, product);
+
+            if (quantity > product.getStock() || quantity < 0) {
+                throw new OutOfStockException("Not enough product");
+            }
+
+            if (cartItem.isPresent()) {
+                cartItem.get().setQuantity(quantity);
+            } else {
+                cart.getCartItemList().add(new CartItem(product, quantity));
+            }
+
+            recalculate(cart);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void delete(Cart cart, Product product) {
+        lock.lock();
+        try{
+            Optional<CartItem> cartI = cart.getCartItemList().stream().filter(cartItem -> cartItem.getProduct().equals(product)).findAny();
+            cartI.ifPresent(cartItem -> cart.getCartItemList().remove(cartItem));
+            recalculate(cart);
+        } finally {
+            lock.unlock();
+        }
+    }
 }
