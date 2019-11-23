@@ -47,7 +47,7 @@ public class HttpSessionCartServiceTest {
     public void testAddProduct() {
         httpSessionCartService.addProduct(cart, product1, 1);
 
-        assertEquals(cart.getCartItemList().size(), 1);
+        assertEquals(cart.getTotalQuantity(), 1);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class HttpSessionCartServiceTest {
         httpSessionCartService.addProduct(cart, product1, 5);
         httpSessionCartService.addProduct(cart, product1, 1);
 
-        assertEquals(cart.getCartItemList().size(), 1);
+        assertEquals(cart.getTotalQuantity(), 1);
         assertEquals(cart.getTotalQuantity(), 6);
         assertEquals(cart.getTotalPrice(), new BigDecimal(5*6));
     }
@@ -64,5 +64,35 @@ public class HttpSessionCartServiceTest {
     public void testAddExistingProductWithBigQuantity() {
         httpSessionCartService.addProduct(cart, product1, 5);
         httpSessionCartService.addProduct(cart, product1, 20);
+    }
+
+    @Test
+    public void testUpdateWithZeroQuantity() {
+        httpSessionCartService.addProduct(cart, product1, 5);
+        httpSessionCartService.update(cart, product1, 0);
+
+        assertEquals(cart.getTotalQuantity(), 0);
+    }
+
+    @Test(expected = OutOfStockException.class)
+    public void testUpdateWithBigQuantity() {
+        httpSessionCartService.addProduct(cart, product1, 5);
+        httpSessionCartService.update(cart, product1, 30);
+    }
+
+    @Test
+    public void testUpdate() {
+        httpSessionCartService.addProduct(cart, product1, 6);
+        httpSessionCartService.update(cart, product1, 5);
+
+        assertEquals(cart.getTotalQuantity(), 5);
+    }
+
+    @Test
+    public void testDelete() {
+        httpSessionCartService.addProduct(cart, product1, 5);
+        httpSessionCartService.delete(cart, product1);
+
+        assertEquals(cart.getTotalQuantity(), 0);
     }
 }

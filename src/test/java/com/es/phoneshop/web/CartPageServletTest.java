@@ -2,7 +2,6 @@ package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.cart.CartService;
-import com.es.phoneshop.model.lastViewed.LastViewedService;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductListService;
 import org.junit.Before;
@@ -18,14 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Locale;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProductDetailsPageServletTest {
+public class CartPageServletTest {
     @Mock
     private HttpServletRequest request;
     @Mock
@@ -37,48 +36,55 @@ public class ProductDetailsPageServletTest {
     @Mock
     private ProductListService productListService;
     @Mock
-    private LastViewedService lastViewedService;
-    @Mock
     private CartService cartService;
-    @Mock
-    private LinkedList lastViewed;
     @Mock
     private Cart cart;
     @Mock
     private Product product;
     @InjectMocks
-    private ProductDetailsPageServlet servlet;
+    private CartPageServlet servlet;
 
     @Before
     public void setup() {
-        when(productListService.getProduct(1L)).thenReturn(product);
+        when(productListService.getProduct(anyLong())).thenReturn(product);
         when(cartService.getCart(session)).thenReturn(cart);
         when(request.getSession()).thenReturn(session);
-        when(request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher("/WEB-INF/pages/cart.jsp")).thenReturn(requestDispatcher);
     }
 
     @Test
     public void testDoGet() throws ServletException, IOException {
-        when(lastViewedService.getLastViewed(session)).thenReturn(lastViewed);
-        when(request.getPathInfo()).thenReturn("/1");
-
         servlet.doGet(request, response);
 
-        verify(lastViewedService).add(lastViewed, product);
-        verify(request).setAttribute("product", productListService.getProduct(1L));
-        verify(request).setAttribute("lastViewed", lastViewed);
+        verify(request).setAttribute("cart", cart);
         verify(requestDispatcher).forward(request, response);
     }
 
     @Test
     public void testDoPost() throws ServletException, IOException {
-        when(request.getPathInfo()).thenReturn("/1");
+        String[] productIdStrings = {"1", "2"};
+        String[] quantityStrings = {"1", "2"};
+        when(request.getParameterValues("productId")).thenReturn(productIdStrings);
+        when(request.getParameterValues("quantity")).thenReturn(quantityStrings);
         when(request.getLocale()).thenReturn(Locale.ENGLISH);
-        when(request.getParameter("quantity")).thenReturn("1");
 
         servlet.doPost(request, response);
 
-        verify(cartService).addProduct(cart, product, 1);
-        verify(response).sendRedirect(request.getRequestURI() + "?message=Added to cart successfully");
+        verify(response).sendRedirect(request.getRequestURI() + "?message=update successfully");
+    }
+
+    @Test
+    public void testDoPostWithException() throws ServletException, IOException {
+        String[] productIdStrings = {"1", "2"};
+        String[] quantityStrings = {"-300", "aaaa"};
+        when(request.getParameterValues("productId")).thenReturn(productIdStrings);
+        when(request.getParameterValues("quantity")).thenReturn(quantityStrings);
+        when(request.getLocale()).thenReturn(Locale.ENGLISH);
+
+        servlet.doPost(request, response);
+
+        verify(request).setAttribute(eq("errorMap"), any());
+        verify(request).setAttribute("cart", cart);
+        verify(requestDispatcher).forward(request, response);
     }
 }

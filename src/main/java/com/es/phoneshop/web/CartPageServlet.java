@@ -59,12 +59,12 @@ public class CartPageServlet extends HttpServlet {
             }
         }
 
-        if (!errorMap.isEmpty()) {
-            request.setAttribute("errorMap", errorMap);
-            showPage(request, response);
+        if (errorMap.isEmpty()) {
+            response.sendRedirect(request.getRequestURI() + "?message=update successfully");
             return;
         }
 
-        response.sendRedirect(request.getRequestURI() + "?message=update successfully");
+        request.setAttribute("errorMap", errorMap);
+        showPage(request, response);
     }
 }

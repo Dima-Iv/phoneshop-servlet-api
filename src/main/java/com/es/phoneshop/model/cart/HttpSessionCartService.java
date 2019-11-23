@@ -28,10 +28,12 @@ public class HttpSessionCartService implements CartService {
     private void recalculate(Cart cart) {
         lock.lock();
         try {
-            int tempTotalQuantity = cart.getCartItemList().stream().mapToInt(CartItem::getQuantity).sum();
+            int tempTotalQuantity = cart.getCartItemList()
+                    .stream().mapToInt(CartItem::getQuantity).sum();
 
             BigDecimal tempTotalPrice = cart.getCartItemList().stream()
-                    .map(cartItem -> new BigDecimal(cartItem.getQuantity()).multiply(cartItem.getProduct().getPrice()))
+                    .map(cartItem -> new BigDecimal(cartItem.getQuantity())
+                            .multiply(cartItem.getProduct().getPrice()))
                     .reduce(BigDecimal::add).orElse(null);
 
             cart.setTotalQuantity(tempTotalQuantity);
@@ -44,7 +46,9 @@ public class HttpSessionCartService implements CartService {
     public Optional<CartItem> findProduct(Cart cart, Product product) {
         lock.lock();
         try {
-            return cart.getCartItemList().stream().filter(cartItem -> cartItem.getProduct().equals(product)).findAny();
+            return cart.getCartItemList().stream()
+                    .filter(cartItem -> cartItem.getProduct()
+                            .equals(product)).findAny();
         } finally {
             lock.unlock();
         }
@@ -83,7 +87,6 @@ public class HttpSessionCartService implements CartService {
                 cart.getCartItemList().add(new CartItem(product, quantity));
             }
 
-            //product.setStock(product.getStock() - quantity);
             recalculate(cart);
         } finally {
             lock.unlock();
@@ -105,11 +108,7 @@ public class HttpSessionCartService implements CartService {
                 throw new OutOfStockException("Not enough product");
             }
 
-            if (cartItem.isPresent()) {
-                cartItem.get().setQuantity(quantity);
-            } else {
-                cart.getCartItemList().add(new CartItem(product, quantity));
-            }
+            cartItem.ifPresent(item -> item.setQuantity(quantity));
 
             recalculate(cart);
         } finally {
@@ -121,8 +120,8 @@ public class HttpSessionCartService implements CartService {
     public void delete(Cart cart, Product product) {
         lock.lock();
         try{
-            Optional<CartItem> cartI = cart.getCartItemList().stream().filter(cartItem -> cartItem.getProduct().equals(product)).findAny();
-            cartI.ifPresent(cartItem -> cart.getCartItemList().remove(cartItem));
+            findProduct(cart, product).ifPresent(cartItem -> cart.getCartItemList()
+                    .remove(cartItem));
             recalculate(cart);
         } finally {
             lock.unlock();
