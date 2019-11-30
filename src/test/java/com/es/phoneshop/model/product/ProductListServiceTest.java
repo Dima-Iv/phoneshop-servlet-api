@@ -20,11 +20,11 @@ public class ProductListServiceTest {
     private ProductListService productListService = new ProductListService();
 
     @Mock
-    Product product;
+    private Product product;
     @Mock
-    Product product1;
+    private Product product1;
     @Mock
-    Product product2;
+    private Product product2;
 
     @Before
     public void setup() {

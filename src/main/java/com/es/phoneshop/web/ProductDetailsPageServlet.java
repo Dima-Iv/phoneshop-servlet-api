@@ -31,7 +31,6 @@ public class ProductDetailsPageServlet extends HttpServlet {
     private void showPage(HttpServletRequest request, HttpServletResponse response, Product product) throws ServletException, IOException {
         request.setAttribute("product", product);
         request.setAttribute("lastViewed", lastViewedService.getLastViewed(request.getSession()));
-        request.setAttribute("cart", cartService.getCart(request.getSession()));
         request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
     }
 

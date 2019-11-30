@@ -1,10 +1,11 @@
 package com.es.phoneshop.model.cart;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Cart {
+public class Cart implements Serializable {
     private Set<CartItem> cartItemList;
     private int totalQuantity;
     private BigDecimal totalPrice;

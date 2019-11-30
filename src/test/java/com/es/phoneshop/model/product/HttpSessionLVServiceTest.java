@@ -20,17 +20,17 @@ public class HttpSessionLVServiceTest {
     private LinkedList<Product> cartItemList = new LinkedList<>();
 
     @Mock
-    Product product1;
+    private Product product1;
     @Mock
-    Product product2;
+    private Product product2;
     @Mock
-    Product product3;
+    private Product product3;
     @Mock
-    Product product4;
+    private Product product4;
     @Mock
-    Product product5;
+    private Product product5;
     @Mock
-    HttpSession session;
+    private HttpSession session;
 
     @Before
     public void setUp() {

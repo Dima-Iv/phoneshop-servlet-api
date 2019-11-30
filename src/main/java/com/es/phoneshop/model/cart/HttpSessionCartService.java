@@ -28,10 +28,12 @@ public class HttpSessionCartService implements CartService {
     private void recalculate(Cart cart) {
         lock.lock();
         try {
-            int tempTotalQuantity = cart.getCartItemList().stream().mapToInt(CartItem::getQuantity).sum();
+            int tempTotalQuantity = cart.getCartItemList()
+                    .stream().mapToInt(CartItem::getQuantity).sum();
 
             BigDecimal tempTotalPrice = cart.getCartItemList().stream()
-                    .map(cartItem -> new BigDecimal(cartItem.getQuantity()).multiply(cartItem.getProduct().getPrice()))
+                    .map(cartItem -> new BigDecimal(cartItem.getQuantity())
+                            .multiply(cartItem.getProduct().getPrice()))
                     .reduce(BigDecimal::add).orElse(null);
 
             cart.setTotalQuantity(tempTotalQuantity);
@@ -44,7 +46,9 @@ public class HttpSessionCartService implements CartService {
     public Optional<CartItem> findProduct(Cart cart, Product product) {
         lock.lock();
         try {
-            return cart.getCartItemList().stream().filter(cartItem -> cartItem.getProduct().equals(product)).findAny();
+            return cart.getCartItemList().stream()
+                    .filter(cartItem -> cartItem.getProduct()
+                            .equals(product)).findAny();
         } finally {
             lock.unlock();
         }
@@ -54,10 +58,10 @@ public class HttpSessionCartService implements CartService {
     public Cart getCart(HttpSession session) {
         lock.lock();
         try {
-            Cart cart = (Cart) session.getAttribute("cart");
+            Cart cart = (Cart) session.getAttribute("cart_session");
             if (cart == null) {
                 cart = new Cart();
-                session.setAttribute("cart", cart);
+                session.setAttribute("cart_session", cart);
             }
             return cart;
         } finally {
@@ -83,7 +87,41 @@ public class HttpSessionCartService implements CartService {
                 cart.getCartItemList().add(new CartItem(product, quantity));
             }
 
-            //product.setStock(product.getStock() - quantity);
+            recalculate(cart);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void update(Cart cart, Product product, int quantity) {
+        lock.lock();
+        try {
+            if (quantity == 0) {
+                delete(cart, product);
+                return;
+            }
+
+            Optional<CartItem> cartItem = findProduct(cart, product);
+
+            if (quantity > product.getStock() || quantity < 0) {
+                throw new OutOfStockException("Not enough product");
+            }
+
+            cartItem.ifPresent(item -> item.setQuantity(quantity));
+
+            recalculate(cart);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void delete(Cart cart, Product product) {
+        lock.lock();
+        try {
+            findProduct(cart, product).ifPresent(cartItem -> cart.getCartItemList()
+                    .remove(cartItem));
             recalculate(cart);
         } finally {
             lock.unlock();
