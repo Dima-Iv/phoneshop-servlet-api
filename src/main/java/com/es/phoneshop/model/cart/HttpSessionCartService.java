@@ -58,10 +58,10 @@ public class HttpSessionCartService implements CartService {
     public Cart getCart(HttpSession session) {
         lock.lock();
         try {
-            Cart cart = (Cart) session.getAttribute("cart");
+            Cart cart = (Cart) session.getAttribute("cart_session");
             if (cart == null) {
                 cart = new Cart();
-                session.setAttribute("cart", cart);
+                session.setAttribute("cart_session", cart);
             }
             return cart;
         } finally {
@@ -97,7 +97,7 @@ public class HttpSessionCartService implements CartService {
     public void update(Cart cart, Product product, int quantity) {
         lock.lock();
         try {
-            if(quantity == 0) {
+            if (quantity == 0) {
                 delete(cart, product);
                 return;
             }
@@ -119,7 +119,7 @@ public class HttpSessionCartService implements CartService {
     @Override
     public void delete(Cart cart, Product product) {
         lock.lock();
-        try{
+        try {
             findProduct(cart, product).ifPresent(cartItem -> cart.getCartItemList()
                     .remove(cartItem));
             recalculate(cart);

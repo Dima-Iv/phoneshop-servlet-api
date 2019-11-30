@@ -38,14 +38,16 @@
         <c:forEach var="product" items="${lastViewed}">
             <tr>
                 <td>
-                    <img class="product-tile" src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+                    <img class="product-tile"
+                         src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
                 </td>
                 <td>
                     <a href="${pageContext.servletContext.contextPath}/products/${product.id}">${product.description}</a>
                 </td>
                 <td class="price">
                     <a href="${pageContext.servletContext.contextPath}/products/prices/${product.id}">
-                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+                        <fmt:formatNumber value="${product.price}" type="currency"
+                                          currencySymbol="${product.currency.symbol}"/>
                     </a>
                 </td>
             </tr>

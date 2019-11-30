@@ -10,10 +10,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpSession;
-
 import java.math.BigDecimal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,9 +22,9 @@ public class HttpSessionCartServiceTest {
     private Cart cart = new Cart();
 
     @Mock
-    Product product1;
+    private Product product1;
     @Mock
-    HttpSession session;
+    private HttpSession session;
 
     @Before
     public void setUp() {
@@ -55,9 +55,8 @@ public class HttpSessionCartServiceTest {
         httpSessionCartService.addProduct(cart, product1, 5);
         httpSessionCartService.addProduct(cart, product1, 1);
 
-        assertEquals(cart.getTotalQuantity(), 1);
         assertEquals(cart.getTotalQuantity(), 6);
-        assertEquals(cart.getTotalPrice(), new BigDecimal(5*6));
+        assertEquals(cart.getTotalPrice(), new BigDecimal(5 * 6));
     }
 
     @Test(expected = OutOfStockException.class)

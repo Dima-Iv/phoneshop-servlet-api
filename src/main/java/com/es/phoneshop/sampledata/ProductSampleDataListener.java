@@ -14,7 +14,7 @@ public class ProductSampleDataListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         ProductDao productDao = ArrayListProductDao.getInstance();
 
-        if("true".equals(servletContextEvent.getServletContext().getInitParameter("dataListenerRegulator"))) {
+        if ("true".equals(servletContextEvent.getServletContext().getInitParameter("dataListenerRegulator"))) {
             Currency usd = Currency.getInstance("USD");
             Map<Date, BigDecimal> prices = new LinkedHashMap<>();
             Calendar date1 = new GregorianCalendar(2011, 10, 10);
