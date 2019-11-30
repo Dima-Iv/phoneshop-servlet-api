@@ -3,4 +3,4 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<a href="${pageContext.servletContext.contextPath}/cart">Cart: $ ${cart.totalPrice != null ? cart.totalPrice : 0}</a>
+<a class="nav-link" href="${pageContext.servletContext.contextPath}/cart">Cart: $ ${cart.totalPrice != null ? cart.totalPrice : 0} <span class="sr-only"></span></a>
