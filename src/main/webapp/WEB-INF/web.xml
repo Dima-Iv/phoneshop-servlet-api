@@ -65,6 +65,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>checkoutPageServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.web.CheckoutPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>checkoutPageServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>miniCartServlet</servlet-name>
         <servlet-class>com.es.phoneshop.web.MiniCartServlet</servlet-class>
     </servlet>
