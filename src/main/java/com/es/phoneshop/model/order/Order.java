@@ -15,6 +15,7 @@ public class Order extends Cart {
     private String date;
     private String address;
     private String payment;
+    private String secureId;
 
     public Order(Set<CartItem> cartItemList, int totalQuantity, BigDecimal totalPrice) {
         super(cartItemList, totalQuantity, totalPrice);
@@ -82,5 +83,13 @@ public class Order extends Cart {
 
     public void setPayment(String payment) {
         this.payment = payment;
+    }
+
+    public String getSecureId() {
+        return secureId;
+    }
+
+    public void setSecureId(String secureId) {
+        this.secureId = secureId;
     }
 }

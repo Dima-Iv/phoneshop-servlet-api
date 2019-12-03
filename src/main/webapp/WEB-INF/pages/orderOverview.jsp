@@ -3,5 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<a class="nav-link" href="${pageContext.servletContext.contextPath}/cart">Cart:
-    $ ${cart.totalPrice != null ? cart.totalPrice : 0} <span class="sr-only"></span></a>
+<jsp:useBean id="order" type="com.es.phoneshop.model.order.Order" scope="request"/>
+<tags:master pageTitle="OrderOverview">
+    <p style="color: green">
+        Purchase completed!
+    </p>
+</tags:master>

@@ -2,10 +2,9 @@ package com.es.phoneshop.model.order;
 
 import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.cart.CartItem;
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 
-import javax.print.attribute.standard.OrientationRequested;
 import java.math.BigDecimal;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -44,7 +43,15 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void placeOrder(Order order) {
+    public Order getOrder(String secureId) {
+        return ArrayListOrderDao.getInstance().getOrder(secureId);
+    }
 
+    @Override
+    public String placeOrder(Order order) {
+        String secureId = UUID.randomUUID().toString();
+        order.setSecureId(secureId);
+        ArrayListOrderDao.getInstance().saveOrder(order);
+        return secureId;
     }
 }

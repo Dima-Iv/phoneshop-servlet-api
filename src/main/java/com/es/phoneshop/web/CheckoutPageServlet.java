@@ -70,6 +70,8 @@ public class CheckoutPageServlet extends HttpServlet {
         order.setAddress(address);
         order.setPayment(payment);
 
-        orderService.placeOrder(order);
+        String secureId = orderService.placeOrder(order);
+        cartService.resetCart(cart);
+        response.sendRedirect(request.getContextPath() + "/order/overview/" + secureId);
     }
 }

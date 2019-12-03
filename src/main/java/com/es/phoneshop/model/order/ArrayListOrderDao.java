@@ -10,6 +10,10 @@ public class ArrayListOrderDao implements OrderDao {
     private List<Order> orders;
     private static Lock lock = new ReentrantLock();
 
+    private ArrayListOrderDao() {
+        orders = new ArrayList<>();
+    }
+
     public static ArrayListOrderDao getInstance() {
         lock.lock();
         try {
@@ -22,16 +26,17 @@ public class ArrayListOrderDao implements OrderDao {
         }
     }
 
-    private ArrayListOrderDao() {
-        orders = new ArrayList<>();
+    @Override
+    public Order getOrder(String secureId) {
+        return orders.stream().filter(order -> secureId.equals(order.getSecureId())).findAny().get();
     }
 
     @Override
     public void saveOrder(Order order) {
-        if(orders.contains(order)) {
+        if (orders.contains(order)) {
             throw new IllegalArgumentException();
         }
-        if(order != null) {
+        if (order != null) {
             orders.add(order);
         }
     }
