@@ -3,7 +3,9 @@ package com.es.phoneshop.model.product;
 import com.es.phoneshop.exceptions.ProductNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -72,6 +74,23 @@ public class ArrayListProductDao implements ProductDao {
         lock.lock();
         try {
             productList.remove(getProduct(id));
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void addComment(Product product, String name, String rating, String comment) {
+        lock.lock();
+        try {
+            Map<String, String> comments = product.getComments();
+            if (comments == null) {
+                comments = new HashMap<>();
+                comments.put(name, "Rating: " + rating + " " + comment);
+                product.setComments(comments);
+            } else {
+                comments.put(name, "Rating: " + rating + " " + comment);
+            }
         } finally {
             lock.unlock();
         }

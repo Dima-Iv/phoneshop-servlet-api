@@ -18,6 +18,7 @@ public class Product implements Serializable {
     private Currency currency;
     private int stock;
     private String imageUrl;
+    private Map<String, String> comments;
 
     public Product() {
     }
@@ -94,6 +95,14 @@ public class Product implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Map<String, String> getComments() {
+        return comments;
+    }
+
+    public void setComments(Map<String, String> comments) {
+        this.comments = comments;
     }
 
     @Override

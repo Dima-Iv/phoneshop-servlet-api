@@ -29,7 +29,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="${pageContext.servletContext.contextPath}">Home <span
+                    <a class="nav-link" href="${pageContext.servletContext.contextPath}/products">Home <span
                             class="sr-only"></span></a>
                 </li>
                 <li class="nav-item active">

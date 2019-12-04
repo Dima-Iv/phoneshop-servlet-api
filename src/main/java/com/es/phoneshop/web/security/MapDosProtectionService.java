@@ -34,7 +34,7 @@ public class MapDosProtectionService implements DosProtectionService {
 
         if (count == null) {
             count = 0;
-        } else if (count > 20) {
+        } else if (count > 20000) {
             return false;
         }
 

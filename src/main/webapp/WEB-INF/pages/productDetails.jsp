@@ -34,6 +34,33 @@
             </p>
         </c:if>
     </form>
+
+    <form method="post" action="${pageContext.servletContext.contextPath}/products/addComment/${product.id}">
+        <tags:field label="Name" name="name" errorMap="${errorMap}"></tags:field><br>
+        <tags:field label="Rating" name="rating" errorMap="${errorMap}"></tags:field><br>
+        <label>Comment:</label><input name="comment"/>
+        <button>Add comment</button>
+    </form>
+
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>Comment</td>
+        </tr>
+        <p>
+            <c:forEach var="comm" items="${product.comments}" varStatus="status">
+                <tr>
+                    <td>
+                       ${comm.key}
+                    </td>
+                    <td>
+                        ${comm.value}
+                    </td>
+                </tr>
+            </c:forEach>
+        </p>
+    </table>
+
     <p>
         <c:forEach var="product" items="${lastViewed}">
             <tr>

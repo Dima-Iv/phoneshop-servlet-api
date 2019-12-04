@@ -15,6 +15,15 @@
     </listener>
 
     <servlet>
+        <servlet-name>welcomePage</servlet-name>
+        <servlet-class>com.es.phoneshop.web.WelcomePage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>welcomePage</servlet-name>
+        <url-pattern>/welcome</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>productList</servlet-name>
         <servlet-class>com.es.phoneshop.web.ProductListPageServlet</servlet-class>
     </servlet>
@@ -62,6 +71,16 @@
     <servlet-mapping>
         <servlet-name>cartItemDeleteServlet</servlet-name>
         <url-pattern>/cart/deleteCartItem</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addCommentServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.web.AddCommentServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addCommentServlet</servlet-name>
+        <url-pattern>/products/addComment/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
