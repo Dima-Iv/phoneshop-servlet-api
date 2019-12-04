@@ -44,9 +44,7 @@
                     <td>
                         <input name="quantity"
                                value="${not empty errorMap[product] ? paramValues.quantity[status.index] : item.quantity}"/>
-                        <c:if test="${not empty errorMap[product]}">
-            <p style="color: red">${errorMap[product]}</p>
-            </c:if>
+            <c:if test="${not empty errorMap[product]}"><p style="color: red">${errorMap[product]}</p></c:if>
             <input type="hidden" name="productId" value="${product.id}"/>
             </td>
             <td>
@@ -58,8 +56,10 @@
         </table>
         <button>Update</button>
     </form>
-    <form id="deleteCartItem" action="${pageContext.servletContext.contextPath}/cart/deleteCartItem" method="post">
-
+    <form id="deleteCartItem" action="${pageContext.servletContext.contextPath}/cart/deleteCartItem"
+          method="post"></form>
+    <form action="${pageContext.servletContext.contextPath}/checkout" method="get">
+        <button>Checkout</button>
     </form>
     <p>
         <c:forEach var="product" items="${lastViewed}">

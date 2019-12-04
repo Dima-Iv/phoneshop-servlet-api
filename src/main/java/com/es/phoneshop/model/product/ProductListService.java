@@ -84,4 +84,13 @@ public class ProductListService {
             lock.unlock();
         }
     }
+
+    public void addComment(Product product, String name, String rating, String comment) {
+        lock.lock();
+        try {
+            productDao.addComment(product, name, rating, comment);
+        } finally {
+            lock.unlock();
+        }
+    }
 }

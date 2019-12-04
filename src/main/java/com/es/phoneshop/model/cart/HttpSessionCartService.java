@@ -43,7 +43,7 @@ public class HttpSessionCartService implements CartService {
         }
     }
 
-    public Optional<CartItem> findProduct(Cart cart, Product product) {
+    private Optional<CartItem> findProduct(Cart cart, Product product) {
         lock.lock();
         try {
             return cart.getCartItemList().stream()
@@ -122,6 +122,20 @@ public class HttpSessionCartService implements CartService {
         try {
             findProduct(cart, product).ifPresent(cartItem -> cart.getCartItemList()
                     .remove(cartItem));
+            recalculate(cart);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void resetCart(Cart cart) {
+        lock.lock();
+        try {
+            for (CartItem cartItem : cart.getCartItemList()) {
+                cartItem.getProduct().setStock(cartItem.getProduct().getStock() - cartItem.getQuantity());
+            }
+            cart.getCartItemList().removeIf(cartItem -> true);
             recalculate(cart);
         } finally {
             lock.unlock();

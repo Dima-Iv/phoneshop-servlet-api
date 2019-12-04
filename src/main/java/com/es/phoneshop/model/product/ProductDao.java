@@ -10,4 +10,6 @@ public interface ProductDao {
     void save(Product product);
 
     void delete(Long id);
+
+    void addComment(Product product, String name, String rating, String comment);
 }

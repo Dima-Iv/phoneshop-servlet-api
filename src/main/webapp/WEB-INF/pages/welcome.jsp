@@ -3,5 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<a class="nav-link" href="${pageContext.servletContext.contextPath}/cart">Cart:
-    $ ${cart.totalPrice != null ? cart.totalPrice : 0} <span class="sr-only"></span></a>
+<h1>Welcome to out shop</h1>
+
+<form action="${pageContext.servletContext.contextPath}/products" method="get">
+    <button>Proceed</button>
+</form>

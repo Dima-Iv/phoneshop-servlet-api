@@ -15,6 +15,15 @@
     </listener>
 
     <servlet>
+        <servlet-name>welcomePage</servlet-name>
+        <servlet-class>com.es.phoneshop.web.WelcomePage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>welcomePage</servlet-name>
+        <url-pattern>/welcome</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>productList</servlet-name>
         <servlet-class>com.es.phoneshop.web.ProductListPageServlet</servlet-class>
     </servlet>
@@ -65,6 +74,36 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>addCommentServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.web.AddCommentServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addCommentServlet</servlet-name>
+        <url-pattern>/products/addComment/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>checkoutPageServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.web.CheckoutPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>checkoutPageServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>orderOverviewPageServlet</servlet-name>
+        <servlet-class>com.es.phoneshop.web.OrderOverviewPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>orderOverviewPageServlet</servlet-name>
+        <url-pattern>/order/overview/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>miniCartServlet</servlet-name>
         <servlet-class>com.es.phoneshop.web.MiniCartServlet</servlet-class>
     </servlet>
@@ -73,6 +112,16 @@
         <servlet-name>miniCartServlet</servlet-name>
         <url-pattern>/cart/miniCart</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>dosProtectionFilter</filter-name>
+        <filter-class>com.es.phoneshop.web.filter.DosFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>dosProtectionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <error-page>
         <error-code>404</error-code>
